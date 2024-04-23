@@ -77,7 +77,7 @@ def generate_tags(embedding):
     # Round each prediction in output[0]
     rounded_predictions = output[0].round()
 
-    with open('reverse_vocab.json', 'r') as f:
+    with open('esm_reverse_vocab.json', 'r') as f:
         reverse_vocab = json.load(f)
 
     tags = [reverse_vocab[str(i)] for i, value in enumerate(rounded_predictions) if value == 1]
