@@ -8,6 +8,7 @@ import requests
 import onnxruntime as ort
 import numpy as np
 import time
+import boto3
 
 load_dotenv()
 
@@ -28,7 +29,19 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 EMBEDDINGS_API_URL = os.getenv("EMBEDDINGS_API_URL")
 EMBEDDINGS_API_KEY = os.getenv("EMBEDDINGS_API_KEY")
 
-session = ort.InferenceSession("model.onnx", providers=['CPUExecutionProvider'])
+def download_file_from_s3(bucket_name, object_key, local_file_path):
+    s3 = boto3.client('s3')
+    s3.download_file(Bucket=bucket_name, Key=object_key, Filename=local_file_path)
+
+# Specify your S3 bucket and object key
+bucket_name = 'prot-explorer'
+object_key = 'model.onnx'
+local_model_path = 'model.onnx'
+
+# Download the model file
+download_file_from_s3(bucket_name, object_key, local_model_path)
+
+session = ort.InferenceSession(local_model_path, providers=['CPUExecutionProvider'])
 
 def generate_tags(embedding):
     """
