@@ -29,8 +29,18 @@ MONGODB_URI = os.getenv("MONGODB_URI")
 EMBEDDINGS_API_URL = os.getenv("EMBEDDINGS_API_URL")
 EMBEDDINGS_API_KEY = os.getenv("EMBEDDINGS_API_KEY")
 
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_REGION = os.getenv("AWS_REGION")
+
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=AWS_REGION
+)
+
 def download_file_from_s3(bucket_name, object_key, local_file_path):
-    s3 = boto3.client('s3')
     s3.download_file(Bucket=bucket_name, Key=object_key, Filename=local_file_path)
 
 # Specify your S3 bucket and object key
